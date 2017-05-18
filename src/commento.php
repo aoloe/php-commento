@@ -130,8 +130,8 @@ function addComment($url, $comment)
         $comments['comments'][$id] = [
             'id' => $id,
             'url' => $comment['url'],
-            'comment' => $comment['comment'],
-            'name' => $comment['name'],
+            'comment' => htmlspecialchars($comment['comment'], ENT_QUOTES),
+            'name' => htmlspecialchars($comment['name'], ENT_QUOTES),
             // 'timestamp' => date('Y-m-d-HTI:s.u+P'),
             'timestamp' => date(DATE_ATOM),
             'parent' => (int) $comment['parent'],
