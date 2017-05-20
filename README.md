@@ -22,30 +22,30 @@ This PHP backend is a simple PHP implementation that can be installed on any "mo
 - Install `PHP-Commento` by calling the `install` route.
 - Add PHP-Commento to your HTML page(s):
 
-  ~~~.html
-  <!DOCTYPE html>
-  <html lang="en">
-      <head>
-          <meta charset="utf-8">
-          <script src="http://www.the-url-with.your/php-commento/js/commento.js"></script>
-      </head>
-      <body>
-         <div class="content>
-         <p>... Your content...</p>
-         </div>
+      ~~~.html
+      <!DOCTYPE html>
+      <html lang="en">
+          <head>
+              <meta charset="utf-8">
+              <script src="http://www.the-url-with.your/php-commento/js/commento.js"></script>
+          </head>
+          <body>
+             <div class="content>
+             <p>... Your content...</p>
+             </div>
 
-          <div id="commento">
-              <!-- Commento will populate this div with comments -->
-          </div>
+              <div id="commento">
+                  <!-- Commento will populate this div with comments -->
+              </div>
 
-          <script>
-              Commento.init({
-                  serverUrl: "http://www.the-url-with.your/php-commento"
-              })
-          </script>
-      <body>
-  </html>
-  ~~~
+              <script>
+                  Commento.init({
+                      serverUrl: "http://www.the-url-with.your/php-commento"
+                  })
+              </script>
+          <body>
+      </html>
+      ~~~
 
 ## Packaging / Installing from the sources
 
