@@ -17,22 +17,24 @@ define('COMMENTO_PATH', dirname($_SERVER['SCRIPT_FILENAME']));
 function loadConfiguration()
 {
     $result = false;
-    if (defined('COMMENTO_CONFIG_PATH')) {
-        if (file_exists(COMMENTO_CONFIG_PATH)) {
-            include_once(COMMENTO_CONFIG_PATH);
-            $result = true;
-        }
-    } else {
-        $configPath = COMMENTO_PATH;
-        // TODO: probably not windows compatible
-        while ($configPath !== '/') {
-            $configPath = $configPath.'/php-commento-config.php';
-            if (file_exists($configPath)) {
-                include_once($configPath);
+    if (!defined('COMMENTO_NO_CONFIG')) {
+        if (defined('COMMENTO_CONFIG_PATH')) {
+            if (file_exists(COMMENTO_CONFIG_PATH)) {
+                include_once(COMMENTO_CONFIG_PATH);
                 $result = true;
-                break;
             }
-            $configPath = dirname(dirname($configPath));
+        } else {
+            $configPath = COMMENTO_PATH;
+            // TODO: probably not windows compatible
+            while ($configPath !== '/') {
+                $configPath = $configPath.'/php-commento-config.php';
+                if (file_exists($configPath)) {
+                    include_once($configPath);
+                    $result = true;
+                    break;
+                }
+                $configPath = dirname(dirname($configPath));
+            }
         }
     }
 
@@ -42,6 +44,93 @@ function loadConfiguration()
     defined('COMMENTO_DATA_COMMENTS_PATH') || define('COMMENTO_DATA_COMMENTS_PATH', COMMENTO_DATA_PATH.'/comments');
 
     return $result;
+}
+
+/**
+ * @return array(string, string)
+ */
+function run($path, $request)
+{
+    $result = '';
+    $resultType = 'json';
+
+    switch($path) {
+        case 'get':
+            list($result, $resultType) = routeGet($request);
+        break;
+        case 'create':
+            list($result, $resultType) = routeCreate($request);
+        break;
+        case 'install':
+            $resultType = 'html';
+            install();
+            $result = "<p>Installation successful</p>";
+        break;
+        default:
+            if (!headers_sent()) {
+                header("HTTP/1.0 404 Not Found");
+            }
+            $result = [
+                'success' => false,
+                'message' =>'path not found',
+            ];
+    }
+    return array($result, $resultType);
+}
+
+function render($result, $resultType)
+{
+    if ($resultType === 'json') {
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+        }
+        echo(json_encode($result));
+    } elseif ($resultType === 'html') {
+        // TODO: add the html5 document structure around body
+        echo($result);
+    }
+}
+
+function routeGet($request)
+{
+    $comments = [];
+    $message = '';
+    if (array_key_exists('url', $request)) {
+        $comments = array_values(getComments($request['url']));
+    } else {
+        $message = 'no url defined';
+    }
+    $result = [
+        'success' => true,
+        'message' => $message,
+        'comments' => $comments,
+    ];
+    return array($result, 'json');
+}
+
+function routeCreate($request)
+{
+    $success = false;
+    if (array_key_exists('url', $request)
+     && array_key_exists('comment', $request)
+     && array_key_exists('name', $request)
+     && array_key_exists('parent', $request)
+    ) {
+        $success = addComment(
+            $request['url'],
+            [
+                'url' => $request['url'],
+                'comment' => $request['comment'],
+                'name' => $request['name'],
+                'parent' => $request['parent'],
+            ]
+        );
+    }
+    $result = [
+        'success' => $success,
+        'message' => null,
+        'comments' => [],
+    ];
 }
 
 function createCommentsFile($filename)
@@ -132,26 +221,13 @@ function addComment($url, $comment)
             'url' => $comment['url'],
             'comment' => htmlspecialchars($comment['comment'], ENT_QUOTES),
             'name' => htmlspecialchars($comment['name'], ENT_QUOTES),
-            // 'timestamp' => date('Y-m-d-HTI:s.u+P'),
-            'timestamp' => date(DATE_ATOM),
+            'timestamp' => date(DATE_ATOM), // date('Y-m-d-HTI:s.u+P'),
             'parent' => (int) $comment['parent'],
         ];
         file_put_contents(COMMENTO_DATA_COMMENTS_PATH.'/'.getCommentsFilename($url), json_encode($comments));
         return true;
     }
     return false;
-
-    /*
-    return [
-        [
-            'id' => 1,
-            'url' => 'http://ww.impagina.org/commento/php-commento.html',
-            'comment' => 'the comment',
-            'name' => 'myself',
-            'timestamp' => '2017-05-12T08:32:04.333415146+02:00',
-            'parent' => -1,
-        ],
-    */
 }
 
 function install()
