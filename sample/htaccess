@@ -1,4 +1,10 @@
 RewriteEngine on
+RewriteRule ^(.*)(assets/vendor/)(spectre.min.css)$ $1css/$3 [L]
+# http://ww.xox.ch/php-commento-demo/php-commento/assets/vendor/spectre.min.css
+RewriteRule ^(.*)(assets/style/)(commento.min.css)$ $1css/$3 [L]
+# http://ww.xox.ch/php-commento-demo/php-commento/assets/style/commento.min.css
+RewriteRule ^(.*)(assets/vendor/)(showdown.min.js)$ $1js/$3 [L]
+# http://ww.xox.ch/php-commento-demo/php-commento/assets/vendor/showdown.min.js
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]
