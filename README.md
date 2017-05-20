@@ -30,7 +30,7 @@ This PHP backend is a simple PHP implementation that can be installed on any "mo
           <script src="http://www.the-url-with.your/php-commento/js/commento.js"></script>
       </head>
       <body>
-         <div class="content>
+         <div class="content">
          <p>... Your content...</p>
          </div>
 
