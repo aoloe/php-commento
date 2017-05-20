@@ -63,7 +63,7 @@ This PHP backend is a simple PHP implementation that can be installed on any "mo
   - <https://raw.githubusercontent.com/adtac/commento/master/assets/vendor/spectre.min.css>.
 - Add PHP-Commento to your HTML page(s).
 
-If needed, you can minify the Javascript and CSS and Java with [minifier.org](http://www.minifier.org/).
+If needed, you can minify the Javascript and CSS and Javascript with [minifier.org](http://www.minifier.org/).
 
 ## The file structure
 
