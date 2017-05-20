@@ -181,8 +181,12 @@ function getCommentStore($url)
     return json_decode(file_get_contents(COMMENTO_DATA_COMMENTS_PATH.'/'.getCommentsFilename($url)),true);
 }
 
+$eventGetCommentsFilter = [];
 function getComments($url)
 {
+    // $eventGetCommentsFilter[] = function($a) {echo("---&gt; ".$a."<br>\n");};
+
+    array_walk($eventGetCommentsFilter, function($v, $k, $p) {$v($p);}, 'blue');
     return getCommentStore($url)['comments'];
 }
 
@@ -230,6 +234,28 @@ function addComment($url, $comment)
     return false;
 }
 
+/**
+ * delete the content of COMMENTO_DATA_PATH
+ *
+ * this function should never be triggered from a route
+ *
+ * through the $dataDir we try to make it unlikely, that we delete a complete unrelated directory.
+ *
+ * @param $dataDir name of the directory containing the data.
+ */
+function clear($dataDir)
+{
+    if ((basename(COMMENTO_DATA_PATH) == $dataDir) && file_exists(COMMENTO_DATA_URL_PATH)) {
+        unlink(COMMENTO_DATA_URL_PATH);
+        array_map('unlink', glob(COMMENTO_DATA_COMMENTS_PATH.'/*'));
+        rmdir(COMMENTO_DATA_COMMENTS_PATH);
+    }
+}
+
+
+/**
+ * create the file structure in COMMENTO_DATA_PATH
+ */
 function install()
 {
     if (file_exists(COMMENTO_DATA_URL_PATH)) {

@@ -57,11 +57,7 @@ include_once('src/commento.php');
 Commento\loadConfiguration();
 
 // if the test configuration has been loaded and the data-test directory already exists, delete it
-if ((basename(COMMENTO_DATA_PATH) == 'data-test') && file_exists(COMMENTO_DATA_URL_PATH)) {
-    unlink(COMMENTO_DATA_URL_PATH);
-    array_map('unlink', glob(COMMENTO_DATA_COMMENTS_PATH.'/*'));
-    rmdir(COMMENTO_DATA_COMMENTS_PATH);
-}
+Comment\clear('data-test');
 
 if (!file_exists(COMMENTO_DATA_URL_PATH)) {
     Commento\install();
