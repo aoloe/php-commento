@@ -25,25 +25,25 @@ This PHP backend is a simple PHP implementation that can be installed on any "mo
   ~~~.html
   <!DOCTYPE html>
   <html lang="en">
-      <head>
-          <meta charset="utf-8">
-          <script src="http://www.the-url-with.your/php-commento/js/commento.js"></script>
-      </head>
-      <body>
-         <div class="content">
-         <p>... Your content...</p>
-         </div>
+    <head>
+      <meta charset="utf-8">
+      <script src="http://www.the-url-with.your/php-commento/js/commento.js"></script>
+    </head>
+    <body>
+      <div class="content">
+        <p>... Your content...</p>
+      </div>
 
-          <div id="commento">
-              <!-- Commento will populate this div with comments -->
-          </div>
+      <div id="commento">
+        <!-- Commento will populate this div with comments -->
+      </div>
 
-          <script>
-              Commento.init({
-                  serverUrl: "http://www.the-url-with.your/php-commento"
-              })
-          </script>
-      <body>
+      <script>
+        Commento.init({
+          serverUrl: "http://www.the-url-with.your/php-commento"
+        })
+      </script>
+    <body>
   </html>
   ~~~
 
