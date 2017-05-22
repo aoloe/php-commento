@@ -17,7 +17,7 @@ This PHP backend is a simple PHP implementation that can be installed on any "mo
 
 ## Installing
 
-- Get [PHP-Commento release package]() and unpack it.
+- Get the latest [php-Commento.tar released package](https://github.com/aoloe/php-commento/releases/latest) and unpack it.
 - Create a `data/` directory and set it in the `COMMENTO_DATA_PATH` constant in the `index.php` file (by default, `data/` will be used).
 - Install `PHP-Commento` by calling the `install` route.
 - Add PHP-Commento to your HTML page(s):
