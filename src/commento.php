@@ -184,10 +184,11 @@ function getCommentStore($url)
 $eventGetCommentsFilter = [];
 function getComments($url)
 {
-    // $eventGetCommentsFilter[] = function($a) {echo("---&gt; ".$a."<br>\n");};
-
-    array_walk($eventGetCommentsFilter, function($v, $k, $p) {$v($p);}, 'blue');
-    return getCommentStore($url)['comments'];
+    $result = getCommentStore($url)['comments'];
+    // First bits for a hooks system
+    // Commento\$eventGetCommentsFilter[] = function($a) {return "---&gt; ".$a;};
+    foreach ($eventGetCommentsFilter as $e) {$result = array_map($e, $result);}
+    return $result;
 }
 
 /**
