@@ -17,7 +17,7 @@ define('COMMENTO_PATH', dirname($_SERVER['SCRIPT_FILENAME']));
 function loadConfiguration()
 {
     $result = false;
-    if (!defined('COMMENTO_NO_CONFIG')) {
+    if (!defined('COMMENTO_HAS_CONFIG_FILE') || COMMENTO_HAS_CONFIG_FILE) {
         if (defined('COMMENTO_CONFIG_PATH')) {
             if (file_exists(COMMENTO_CONFIG_PATH)) {
                 include_once(COMMENTO_CONFIG_PATH);
@@ -181,13 +181,28 @@ function getCommentStore($url)
     return json_decode(file_get_contents(COMMENTO_DATA_COMMENTS_PATH.'/'.getCommentsFilename($url)),true);
 }
 
-$eventGetCommentsFilter = [];
+/**
+ * sample hook
+ *
+ * @param function $event lambda accepting an array as parameter
+ *      and returning an array.
+ */
+function eventGetCommentsFilter($event = null)
+{
+    static $getCommentsFilter = [];
+    if (isset($event) && is_callable($event)) {
+        $getCommentsFilter[] = $event;
+    } else {
+        return $getCommentsFilter;
+    }
+}
+
 function getComments($url)
 {
     $result = getCommentStore($url)['comments'];
     // First bits for a hooks system
-    // Commento\$eventGetCommentsFilter[] = function($a) {return "---&gt; ".$a;};
-    foreach ($eventGetCommentsFilter as $e) {$result = array_map($e, $result);}
+    // Commento\eventGetCommentsFilter(function($a) {return "---&gt; ".$a;});
+    foreach (eventGetCommentsFilter() as $e) {$result = array_map($e, $result);}
     return $result;
 }
 

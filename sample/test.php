@@ -50,14 +50,15 @@ function testSection($title)
     echo("<h2>$title</h2>\n");
 }
 
-define('COMMENTO_CONFIG_PATH', __DIR__.'/config-test.php');
+define('COMMENTO_HAS_CONFIG_FILE', false);
+define('COMMENTO_DATA_PATH', dirname($_SERVER['SCRIPT_FILENAME']).'/data-test');
 
 include_once('src/commento.php');
 
 Commento\loadConfiguration();
 
 // if the test configuration has been loaded and the data-test directory already exists, delete it
-Comment\clear('data-test');
+Commento\clear('data-test');
 
 if (!file_exists(COMMENTO_DATA_URL_PATH)) {
     Commento\install();

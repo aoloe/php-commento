@@ -10,7 +10,7 @@ include_once('commento.php');
 // debug('_SERVER', $_SERVER);
 
 
-define('COMMENTO_NO_CONFIG', true);
+define('COMMENTO_HAS_CONFIG_FILE', false);
 define('COMMENTO_DATA_PATH', dirname($_SERVER['DOCUMENT_ROOT']).'/php-commento-data');
 
 Commento\loadConfiguration();
