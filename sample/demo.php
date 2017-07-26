@@ -11,9 +11,8 @@ define('COMMENTO_DATA_DEMO_PATH', COMMENTO_DATA_PATH.'/demo.json');
 
 function deleteAfter30Minutes()
 {
-    if (file_exists(COMMENTO_DATA_DEMO_PATH) && is_writable(COMMENTO_DATA_DEMO_PATH)) {
+    if ((file_exists(COMMENTO_DATA_DEMO_PATH) && is_writable(COMMENTO_DATA_DEMO_PATH)) || is_writable(COMMENTO_DATA_PATH)) {
         if ($demo = json_decode(file_get_contents(COMMENTO_DATA_DEMO_PATH), true)) {
-            Commento\debug('demo', $demo);
             if (((time() - $demo['creation']) / 60) > 30) {
                 Commento\clear('php-commento-demo-data');
                 Commento\install();
